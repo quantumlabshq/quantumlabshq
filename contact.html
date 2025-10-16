@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Contact - Quantum Labs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Three.js for 3D effects -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- GSAP for advanced animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+  <style>
+    /* Variables */
+    :root {
+      --white: #FFFFFF;
+      --off-white: rgba(255,255,255,0.9);
+      --light-gray: rgba(248, 248, 248, 0.1);
+      --medium-gray: #E0E0E0;
+      --dark-gray: #AAAAAA;
+      --primary: #000000;
+      --primary-light: #0a0a0a;
+      --secondary: #050505;
+      --accent: #4f7cff;
+      --accent-light: #6a92ff;
+      --accent-dark: #3a61d9;
+      --accent-2: #ff4f7c;
+      --accent-2-light: #ff6a92;
+      --space-blue: #1a1a3a;
+      --space-purple: #2a1a4a;
+      --success: #4CAF50;
+      --warning: #FF9800;
+      --text-dark: #e0e0e0;
+      --text-light: #f5f5f5;
+      --text-muted: #888888;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+      --easing-emphasis: cubic-bezier(0.6, -0.05, 0.25, 1.2);
+      --section-transition-height: 120px;
+    }
+    
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html, body { 
+      height: 100%; 
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-light);
+      background: var(--primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+    
+    /* 3D Galaxy Background */
+    #galaxy-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      background: linear-gradient(to bottom, #000205 0%, #000510 100%);
+    }
+    
+    /* Basic Container */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    
+    /* Header with Mobile Nav - NOT BLACKED OUT */
+    header {
+      position: relative;
+      z-index: 100;
+      width: 100%;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      background: transparent;
+    }
+    
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo img {
+      height: 60px;
+    }
+    
+    /* Navigation */
+    .nav-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      position: relative;
+      padding: 5px 0;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-links a:hover {
+      color: #4f7cff;
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #4f7cff;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+    }
+    
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    
+    /* Hamburger Menu - From template */
+    .mobile-nav-toggle {
+      display: none;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--text-light);
+      z-index: 1002;
+    }
+    
+    .mobile-nav {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      max-width: 350px;
+      height: 100vh;
+      background: rgba(15, 15, 26, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1001;
+      transition: right 0.4s var(--easing-emphasis);
+      display: flex;
+      flex-direction: column;
+      padding: 100px 40px 40px;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .mobile-nav.active {
+      right: 0;
+    }
+    
+    .mobile-nav-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      color: var(--text-light);
+      cursor: pointer;
+      z-index: 1002;
+    }
+    
+    .mobile-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .mobile-nav-links a {
+      color: var(--text-light);
+      font-size: 20px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .mobile-nav-links a:hover {
+      color: var(--accent);
+      padding-left: 10px;
+    }
+    
+    /* Main Page Content */
+    .page-title {
+      text-align: center;
+      padding: 60px 0 40px;
+      background: transparent;
+    }
+    
+    .page-title h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 32px;
+      margin-bottom: 15px;
+      color: #fff;
+      position: relative;
+      display: inline-block;
+    }
+    
+    /* Add gradient effect to title */
+    .page-title h1:after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 30%;
+      width: 40%;
+      height: 3px;
+      background: linear-gradient(90deg, #3a61d9 0%, #4f7cff 50%, #3a61d9 100%);
+      border-radius: 3px;
+    }
+    
+    .page-title p {
+      color: #aaa;
+      font-size: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    /* Simple Contact Section */
+    .contact-section {
+      padding: 20px 0 80px;
+      background: transparent;
+    }
+    
+    /* Enhanced Form */
+    .form-container {
+      background: rgba(17, 17, 25, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 35px 30px;
+      margin-bottom: 30px;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto 30px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Add glowing accent */
+    .form-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #3a61d9 0%, #4f7cff 50%, #3a61d9 100%);
+      box-shadow: 0 0 20px rgba(79, 124, 255, 0.5);
+    }
+    
+    /* Add subtle pattern */
+    .form-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 10% 20%, rgba(79, 124, 255, 0.03) 0%, transparent 40%),
+                  radial-gradient(circle at 90% 80%, rgba(255, 79, 124, 0.03) 0%, transparent 40%);
+      pointer-events: none;
+      opacity: 0.6;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 16px 18px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: #4f7cff;
+      box-shadow: 0 0 15px rgba(79, 124, 255, 0.2), inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Fix Floating Label Positioning */
+    .form-group label {
+      position: absolute;
+      top: 16px;
+      left: 18px;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.6);
+      pointer-events: none;
+      transition: all 0.25s ease;
+      z-index: 11;
+    }
+    
+    .form-control:focus ~ label,
+    .form-control:not(:placeholder-shown) ~ label {
+      top: -10px;
+      left: 15px;
+      font-size: 12px;
+      background: rgba(17, 17, 25, 0.9);
+      padding: 0 8px;
+      border-radius: 3px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: #4f7cff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      z-index: 12;
+    }
+    
+    textarea.form-control {
+      min-height: 140px;
+      resize: vertical;
+    }
+    
+    /* Enhanced Button */
+    .btn {
+      background: linear-gradient(90deg, #3a61d9 0%, #4f7cff 100%);
+      color: #fff;
+      border: none;
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(79, 124, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-family: 'Rajdhani', sans-serif;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(79, 124, 255, 0.4);
+    }
+    
+    .btn:before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: rotate(45deg);
+      z-index: 1;
+      transition: all 0.6s ease;
+    }
+    
+    .btn:hover:before {
+      transform: rotate(45deg) translate(50%, 50%);
+    }
+    
+    .btn:active {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(79, 124, 255, 0.3);
+    }
+    
+    .btn span {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn i {
+      font-size: 18px;
+    }
+    
+    /* Enhanced Contact Info Cards */
+    .contact-info {
+      margin-top: 40px;
+    }
+    
+    .contact-info h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 28px;
+      margin-bottom: 25px;
+      text-align: center;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .contact-info h2:after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #4f7cff 0%, #ff4f7c 100%);
+      border-radius: 3px;
+    }
+    
+    .info-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .info-card {
+      background: rgba(17, 17, 25, 0.7);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .info-card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, #4f7cff 0%, #ff4f7c 100%);
+    }
+    
+    .info-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(79, 124, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 18px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    
+    .info-icon:after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      border-radius: 50%;
+      border: 1px solid rgba(79, 124, 255, 0.3);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { 
+        transform: scale(1);
+        opacity: 1;
+      }
+      100% { 
+        transform: scale(1.3);
+        opacity: 0;
+      }
+    }
+    
+    .info-icon i {
+      color: #4f7cff;
+      font-size: 20px;
+    }
+    
+    .info-content {
+      flex: 1;
+    }
+    
+    .info-content h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+    
+    .info-content p, .info-content a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    
+    .info-content a:hover {
+      color: #4f7cff;
+    }
+    
+    /* Add Success Modal */
+    .success-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.5s ease;
+    }
+    
+    .success-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+    }
+    
+    .modal-content {
+      position: relative;
+      width: 90%;
+      max-width: 600px;
+      background: transparent;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform: scale(0.8);
+      opacity: 0;
+      transition: all 1s ease;
+    }
+    
+    .success-modal.active .modal-content {
+      transform: scale(1);
+      opacity: 1;
+    }
+    
+    .portal-animation {
+      position: relative;
+      width: 250px;
+      height: 250px;
+      margin-bottom: 30px;
+    }
+    
+    .portal-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, #4f7cff 0%, transparent 70%);
+      opacity: 0;
+      transition: all 2s ease;
+    }
+    
+    .success-modal.active .portal-circle {
+      width: 250px;
+      height: 250px;
+      opacity: 0.8;
+      animation: portal-pulse 4s infinite;
+    }
+    
+    @keyframes portal-pulse {
+      0% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.2); }
+      100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+    }
+    
+    .portal-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .success-heading {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 32px;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 15px;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 1s ease 0.5s;
+    }
+    
+    .success-modal.active .success-heading {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .success-message {
+      color: #ddd;
+      text-align: center;
+      max-width: 500px;
+      margin-bottom: 20px;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 1s ease 0.8s;
+    }
+    
+    .success-modal.active .success-message {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .close-button {
+      background: linear-gradient(90deg, #4f7cff 0%, #ff4f7c 100%);
+      border: none;
+      border-radius: 50px;
+      padding: 14px 30px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 1s ease 1s, opacity 1s ease 1s, all 0.3s ease;
+    }
+    
+    .success-modal.active .close-button {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .close-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(79, 124, 255, 0.3);
+    }
+    
+    /* Enhanced Footer */
+    footer {
+      background: rgba(10, 10, 20, 0.8);
+      padding: 40px 0 20px;
+      text-align: center;
+      margin-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .footer-logo {
+      margin-bottom: 25px;
+    }
+    
+    .footer-logo img {
+      height: 60px;
+    }
+    
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .social-link {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+    
+    .social-link:hover {
+      background: #4f7cff;
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      color: #666;
+      font-size: 14px;
+    }
+    
+    /* Desktop Styles */
+    @media (min-width: 768px) {
+      .page-title h1 {
+        font-size: 42px;
+      }
+      
+      .page-title p {
+        font-size: 18px;
+      }
+      
+      .contact-layout {
+        display: flex;
+        gap: 40px;
+        align-items: flex-start;
+      }
+      
+      .form-container {
+        flex: 1;
+        margin-bottom: 0;
+      }
+      
+      .contact-info {
+        flex: 1;
+        margin-top: 0;
+      }
+      
+      .contact-info h2 {
+        text-align: left;
+      }
+    }
+    
+    /* Media Queries with Mobile Nav */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .mobile-nav-toggle {
+        display: block;
+      }
+      
+      .page-title h1 {
+        font-size: 36px;
+      }
+      
+      .contact-layout {
+        flex-direction: column;
+      }
+      
+      .form-container {
+        margin-bottom: 40px;
+      }
+      
+      .contact-info h2 {
+        text-align: center;
+      }
+      
+      .contact-info h2:after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 3D Galaxy Background -->
+  <div id="galaxy-background"></div>
+
+  <!-- Header with Mobile Navigation from template -->
+  <header id="header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="#" class="logo">
+          <img src="images/quantumlabs.png" alt="Quantum Labs Logo" class="logo-image" style="height: 110px;">
+        </a>
+        <div class="nav-container">
+          <nav class="nav-links">
+            <a href="home2.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="contact.html" class="active">Contact</a>
+          </nav>
+          <button class="mobile-nav-toggle" id="mobile-nav-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Menu -->
+  <div class="mobile-nav" id="mobile-nav">
+    <button class="mobile-nav-close" id="mobile-nav-close">
+      <i class="fas fa-times"></i>
+    </button>
+    <nav class="mobile-nav-links">
+      <a href="home2.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+  </div>
+
+  <!-- Enhanced Page Title -->
+  <div class="page-title">
+    <div class="container">
+      <h1>Contact Us</h1>
+      <p>Reach out to begin your quantum growth journey</p>
+    </div>
+  </div>
+
+  <!-- Ultra-Simple Contact Section -->
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-layout">
+        <!-- Basic Form -->
+        <div class="form-container">
+          <form id="contact-form">
+            <div class="form-group">
+              <input type="text" class="form-control" id="name" placeholder="" required>
+              <label for="name">Your Name</label>
+            </div>
+            
+            <div class="form-group">
+              <input type="email" class="form-control" id="email" placeholder="" required>
+              <label for="email">Your Email</label>
+            </div>
+            
+            <div class="form-group">
+              <input type="text" class="form-control" id="subject" placeholder="" required>
+              <label for="subject">Subject</label>
+            </div>
+            
+            <div class="form-group">
+              <textarea class="form-control" id="message" placeholder="" required></textarea>
+              <label for="message">Your Message</label>
+            </div>
+            
+            <button type="submit" class="btn">
+              <span>
+                <i class="fas fa-paper-plane"></i>
+                Send Message
+              </span>
+            </button>
+          </form>
+        </div>
+        
+        <!-- Contact Info -->
+        <div class="contact-info">
+          <h2>Get in Touch</h2>
+          <div class="info-cards">
+            <div class="info-card">
+              <div class="info-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="info-content">
+                <h3>Our Location</h3>
+                <p>Birmingham, United Kingdom</p>
+              </div>
+            </div>
+            
+            <div class="info-card">
+              <div class="info-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="info-content">
+                <h3>Email Us</h3>
+                <p>
+                  <a href="mailto:Zakeriye@quantumlabshq.com">Zakeriye@quantumlabshq.com</a><br>
+                
+                </p>
+              </div>
+            </div>
+            
+            <div class="info-card">
+              <div class="info-icon">
+                <i class="fas fa-phone-alt"></i>
+              </div>
+              <div class="info-content">
+                <h3>Call Us</h3>
+                <p>
+                  <a href="tel:+447956487424">++44 7956487424</a><br>
+                  
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Success Modal -->
+  <div class="success-modal" id="success-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="portal-animation">
+        <div class="portal-circle"></div>
+        <div class="portal-particles" id="portal-particles"></div>
+      </div>
+      <h2 class="success-heading">Message Transmitted!</h2>
+      <p class="success-message">Your message has been quantum-teleported to our team. We'll respond within 24 hours to discuss your growth journey.</p>
+      <button class="close-button" id="modal-close">Return to Reality</button>
+    </div>
+  </div>
+
+  <!-- Enhanced Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-logo">
+        <img src="images/quantumlabs.png" alt="Quantum Labs">
+      </div>
+      <div class="social-links">
+        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com/quantumlabshq?igsh=MWw5cTN6bWd0YXMyeQ%3D%3D" class="social-link"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+      </div>
+      <p class="copyright">© 2024 Quantum Labs. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript for Galaxy Background -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile navigation - from template
+      const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+      const mobileNavClose = document.getElementById('mobile-nav-close');
+      const mobileNav = document.getElementById('mobile-nav');
+      
+      if (mobileNavToggle && mobileNav) {
+        mobileNavToggle.addEventListener('click', function() {
+          mobileNav.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        });
+      }
+      
+      if (mobileNavClose && mobileNav) {
+        mobileNavClose.addEventListener('click', function() {
+          mobileNav.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      }
+      
+      // Close menu when clicking on links
+      const mobileLinks = mobileNav ? mobileNav.querySelectorAll('a') : [];
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          mobileNav.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      });
+      
+      // Form submission with portal effect
+      const form = document.getElementById('contact-form');
+      const modal = document.getElementById('success-modal');
+      const closeBtn = document.getElementById('modal-close');
+      const portalParticles = document.getElementById('portal-particles');
+      
+      if (form && modal && closeBtn) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Create flying particles from form to portal
+          if (portalParticles) {
+            createPortalEffect(form, portalParticles);
+          }
+          
+          // Show success modal after a slight delay
+          setTimeout(() => {
+            modal.classList.add('active');
+            
+            // Create particles inside the portal
+            if (portalParticles) {
+              createPortalParticles(portalParticles, 40);
+            }
+          }, 800);
+        });
+        
+        // Close modal
+        closeBtn.addEventListener('click', () => {
+          modal.classList.remove('active');
+          
+          // Reset form after modal closes
+          setTimeout(() => {
+            form.reset();
+          }, 500);
+        });
+        
+        // Close modal if clicking outside
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal || e.target.classList.contains('modal-backdrop')) {
+            modal.classList.remove('active');
+          }
+        });
+      }
+      
+      // Initialize Galaxy Background
+      initGalaxyBackground();
+    });
+    
+    // Create portal effect
+    function createPortalEffect(form, portalEl) {
+      const formRect = form.getBoundingClientRect();
+      const portalRect = portalEl.getBoundingClientRect();
+      
+      // Create particles
+      for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+          // Create particle
+          const particle = document.createElement('div');
+          particle.className = 'portal-particle';
+          particle.style.width = '5px';
+          particle.style.height = '5px';
+          particle.style.position = 'absolute';
+          particle.style.background = i % 2 === 0 ? '#4f7cff' : '#ff4f7c';
+          particle.style.borderRadius = '50%';
+          particle.style.zIndex = '9999';
+          
+          // Start position (random point on the form)
+          const startX = formRect.left + Math.random() * formRect.width;
+          const startY = formRect.top + Math.random() * formRect.height;
+          
+          // Target position (center of portal)
+          const targetX = portalRect.left + portalRect.width / 2;
+          const targetY = portalRect.top + portalRect.height / 2;
+          
+          // Set initial position
+          particle.style.left = `${startX}px`;
+          particle.style.top = `${startY}px`;
+          
+          // Add to DOM
+          document.body.appendChild(particle);
+          
+          // Animate flying to portal
+          const duration = 1 + Math.random() * 0.5;
+          particle.style.transition = `all ${duration}s ease-in`;
+          
+          setTimeout(() => {
+            particle.style.left = `${targetX}px`;
+            particle.style.top = `${targetY}px`;
+            particle.style.opacity = '0';
+            
+            // Remove after animation
+            setTimeout(() => {
+              particle.remove();
+            }, duration * 1000);
+          }, 10);
+        }, i * 50); // Staggered timing
+      }
+    }
+    
+    // Create particles inside portal
+    function createPortalParticles(container, count) {
+      if (!container) return;
+      
+      // Clear previous particles
+      container.innerHTML = '';
+      
+      const centerX = container.offsetWidth / 2;
+      const centerY = container.offsetHeight / 2;
+      
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.width = '6px';
+        particle.style.height = '6px';
+        particle.style.borderRadius = '50%';
+        particle.style.opacity = '0';
+        
+        // Set random initial position near center
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 20;
+        
+        const x = centerX + Math.cos(angle) * distance;
+        const y = centerY + Math.sin(angle) * distance;
+        
+        particle.style.left = `${x}px`;
+        particle.style.top = `${y}px`;
+        
+        // Random colors
+        const hue = Math.random() < 0.5 ? 210 : 350; // Blue or pink
+        particle.style.backgroundColor = `hsl(${hue}, 70%, 60%)`;
+        particle.style.boxShadow = `0 0 8px hsl(${hue}, 70%, 60%)`;
+        
+        // Add to container
+        container.appendChild(particle);
+        
+        // Animate particle
+        const duration = 3 + Math.random() * 2;
+        const delay = Math.random() * 1;
+        
+        particle.style.transition = `all ${duration}s ease-out ${delay}s`;
+        
+        setTimeout(() => {
+          const outDistance = 50 + Math.random() * 100;
+          particle.style.left = `${centerX + Math.cos(angle) * outDistance}px`;
+          particle.style.top = `${centerY + Math.sin(angle) * outDistance}px`;
+          particle.style.opacity = '1';
+          
+          setTimeout(() => {
+            particle.style.opacity = '0';
+          }, (duration - 1) * 1000);
+        }, 10);
+      }
+    }
+    
+    // Initialize Galaxy Background
+    function initGalaxyBackground() {
+      // Set up Three.js scene
+      const container = document.getElementById('galaxy-background');
+      if (!container) return;
+      
+      const scene = new THREE.Scene();
+      
+      // Setup camera
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 3000);
+      camera.position.z = 1000;
+      camera.position.y = 0;
+      
+      // Setup renderer
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
+      container.appendChild(renderer.domElement);
+      
+      // Create star materials
+      const starsMaterial = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 1.5,
+        transparent: true,
+        opacity: 0.8,
+        sizeAttenuation: true
+      });
+      
+      // Distant stars (small)
+      const starsGeometry = new THREE.BufferGeometry();
+      const starsCount = 3000;
+      const starsPositions = new Float32Array(starsCount * 3);
+      
+      for (let i = 0; i < starsCount; i++) {
+        const i3 = i * 3;
+        starsPositions[i3] = (Math.random() - 0.5) * 3000;
+        starsPositions[i3 + 1] = (Math.random() - 0.5) * 3000;
+        starsPositions[i3 + 2] = (Math.random() - 0.5) * 3000;
+      }
+      
+      starsGeometry.setAttribute('position', new THREE.BufferAttribute(starsPositions, 3));
+      const starsMesh = new THREE.Points(starsGeometry, starsMaterial);
+      scene.add(starsMesh);
+      
+      // Create larger, brighter stars
+      const brightStarsMaterial = new THREE.PointsMaterial({
+        color: 0x4f7cff,
+        size: 3,
+        transparent: true,
+        opacity: 1,
+        sizeAttenuation: true
+      });
+      
+      const brightStarsGeometry = new THREE.BufferGeometry();
+      const brightStarsCount = 100;
+      const brightStarsPositions = new Float32Array(brightStarsCount * 3);
+      
+      for (let i = 0; i < brightStarsCount; i++) {
+        const i3 = i * 3;
+        brightStarsPositions[i3] = (Math.random() - 0.5) * 2000;
+        brightStarsPositions[i3 + 1] = (Math.random() - 0.5) * 2000;
+        brightStarsPositions[i3 + 2] = (Math.random() - 0.5) * 2000;
+      }
+      
+      brightStarsGeometry.setAttribute('position', new THREE.BufferAttribute(brightStarsPositions, 3));
+      const brightStarsMesh = new THREE.Points(brightStarsGeometry, brightStarsMaterial);
+      scene.add(brightStarsMesh);
+      
+      // Create nebula effect using particle system
+      const nebulaGeometry = new THREE.BufferGeometry();
+      const nebulaCount = 1000;
+      const nebulaPositions = new Float32Array(nebulaCount * 3);
+      const nebulaSizes = new Float32Array(nebulaCount);
+      const nebulaColors = new Float32Array(nebulaCount * 3);
+      
+      for (let i = 0; i < nebulaCount; i++) {
+        const i3 = i * 3;
+        const radius = 300 + Math.random() * 300;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
+        
+        // Calculate position on a sphere
+        nebulaPositions[i3] = radius * Math.sin(phi) * Math.cos(theta);
+        nebulaPositions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        nebulaPositions[i3 + 2] = radius * Math.cos(phi);
+        
+        // Random size
+        nebulaSizes[i] = 5 + Math.random() * 15;
+        
+        // Color variation (blues and purples)
+        const colorChoice = Math.random();
+        if (colorChoice < 0.6) {
+          // Blue tones
+          nebulaColors[i3] = 0.2 + Math.random() * 0.2;
+          nebulaColors[i3 + 1] = 0.4 + Math.random() * 0.3;
+          nebulaColors[i3 + 2] = 0.7 + Math.random() * 0.3;
+        } else {
+          // Purple tones
+          nebulaColors[i3] = 0.5 + Math.random() * 0.3;
+          nebulaColors[i3 + 1] = 0.2 + Math.random() * 0.2;
+          nebulaColors[i3 + 2] = 0.7 + Math.random() * 0.3;
+        }
+      }
+      
+      nebulaGeometry.setAttribute('position', new THREE.BufferAttribute(nebulaPositions, 3));
+      nebulaGeometry.setAttribute('color', new THREE.BufferAttribute(nebulaColors, 3));
+      nebulaGeometry.setAttribute('size', new THREE.BufferAttribute(nebulaSizes, 1));
+      
+      const nebulaMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+          time: { value: 0 },
+          pointSize: { value: 5.0 }
+        },
+        vertexShader: `
+          attribute float size;
+          attribute vec3 color;
+          varying vec3 vColor;
+          uniform float time;
+          void main() {
+            vColor = color;
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            gl_PointSize = size * (300.0 / -mvPosition.z);
+            gl_Position = projectionMatrix * mvPosition;
+          }
+        `,
+        fragmentShader: `
+          varying vec3 vColor;
+          void main() {
+            float dist = length(gl_PointCoord - vec2(0.5));
+            if (dist > 0.5) discard;
+            gl_FragColor = vec4(vColor, 1.0 - (dist * 2.0));
+          }
+        `,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      });
+      
+      const nebulaMesh = new THREE.Points(nebulaGeometry, nebulaMaterial);
+      scene.add(nebulaMesh);
+      
+      // Interactive elements - move on mouse movement (subtle)
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetX = 0;
+      let targetY = 0;
+      
+      document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX - window.innerWidth / 2) / 200;
+        mouseY = (event.clientY - window.innerHeight / 2) / 200;
+      });
+      
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+      
+      // Animation loop
+      let lastTime = 0;
+      const animate = (time) => {
+        const delta = time - lastTime;
+        lastTime = time;
+        
+        targetX = mouseX * 0.2;
+        targetY = mouseY * 0.2;
+        
+        camera.position.x += (targetX - camera.position.x) * 0.05;
+        camera.position.y += (-targetY - camera.position.y) * 0.05;
+        camera.lookAt(scene.position);
+        
+        // Rotate star systems
+        starsMesh.rotation.y += 0.0001 * delta;
+        brightStarsMesh.rotation.y += 0.00015 * delta;
+        nebulaMesh.rotation.y += 0.00005 * delta;
+        
+        // Update nebula time uniform
+        nebulaMaterial.uniforms.time.value = time * 0.001;
+        
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      };
+      
+      animate(0);
+    }
+  </script>
+</body>
+</html>

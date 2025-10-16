@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantum Labs - Business Growth Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    /* Variables */
+    :root {
+      --white: #FFFFFF;
+      --off-white: rgba(255,255,255,0.9);
+      --light-gray: rgba(248, 248, 248, 0.1);
+      --medium-gray: #E0E0E0;
+      --dark-gray: #AAAAAA;
+      --primary: #000000;
+      --primary-light: #0a0a0a;
+      --secondary: #050505;
+      --accent: #4f7cff;
+      --accent-light: #6a92ff;
+      --accent-dark: #3a61d9;
+      --accent-2: #ff4f7c;
+      --accent-2-light: #ff6a92;
+      --space-blue: #1a1a3a;
+      --space-purple: #2a1a4a;
+      --success: #4CAF50;
+      --warning: #FF9800;
+      --text-dark: #e0e0e0;
+      --text-light: #f5f5f5;
+      --text-muted: #888888;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+      --easing-emphasis: cubic-bezier(0.6, -0.05, 0.25, 1.2);
+      --section-transition-height: 120px;
+    }
+    
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html, body { 
+      height: 100%; 
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-light);
+      background: var(--primary);
+      line-height: 1.6;
+    }
+    
+    /* 3D Galaxy Background */
+    #galaxy-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      background: linear-gradient(to bottom, #000205 0%, #000510 100%);
+    }
+    
+    /* WOW FACTOR: Glitch Text Effect */
+    .glitch-text {
+      position: relative;
+      color: var(--text-light);
+      animation: glitchText 1s ease-in-out forwards;
+      opacity: 0;
+    }
+    
+    @keyframes glitchText {
+      0% {
+        opacity: 0;
+        transform: translateY(10px);
+        text-shadow: none;
+      }
+      10% {
+        opacity: 0.2;
+        transform: translateY(8px);
+        text-shadow: 1px 1px var(--accent), -1px -1px var(--accent-2);
+      }
+      20% {
+        opacity: 0.5;
+        transform: translateY(6px);
+        text-shadow: -1px -1px var(--accent), 1px 1px var(--accent-2);
+      }
+      30% {
+        opacity: 0.7;
+        transform: translateY(4px);
+        text-shadow: 1px -1px var(--accent), -1px 1px var(--accent-2);
+      }
+      40% {
+        opacity: 0.8;
+        transform: translateY(2px);
+        text-shadow: 2px 1px var(--accent), -1px -2px var(--accent-2);
+      }
+      50% {
+        opacity: 0.9;
+        transform: translateY(0px);
+        text-shadow: -2px -1px var(--accent), 1px 2px var(--accent-2);
+      }
+      60% {
+        opacity: 1;
+        transform: translateY(0);
+        text-shadow: 1px 1px var(--accent), -1px -1px var(--accent-2);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+        text-shadow: none;
+      }
+    }
+    
+    /* Common Styles */
+    .container { 
+      max-width: 1440px; 
+      margin: 0 auto; 
+      padding: 0 40px; 
+      z-index: 1;
+      position: relative;
+    }
+    
+    /* ENHANCED: Section styles with better separation */
+    section { 
+      position: relative; 
+      padding: 100px 0; 
+      margin-bottom: var(--section-transition-height);
+    }
+    
+    /* NEW: Section divider for better visual separation */
+    section::after {
+      content: '';
+      position: absolute;
+      bottom: calc(-1 * var(--section-transition-height));
+      left: 0;
+      width: 100%;
+      height: var(--section-transition-height);
+      background: linear-gradient(to bottom, var(--primary), transparent);
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    /* NEW: Cosmic Horizon Dividers for section separation */
+    .cosmic-horizon {
+      position: absolute;
+      bottom: -80px;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(to bottom, 
+                rgba(26, 26, 58, 0.2) 0%, 
+                rgba(20, 20, 45, 0.1) 60%, 
+                transparent 100%);
+      z-index: 1;
+      overflow: hidden;
+    }
+    
+    .cosmic-horizon::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right,
+                transparent 0%,
+                rgba(79, 124, 255, 0.2) 20%,
+                rgba(79, 124, 255, 0.3) 50%,
+                rgba(79, 124, 255, 0.2) 80%,
+                transparent 100%);
+    }
+    
+    .text-center { 
+      text-align: center; 
+    }
+    
+    h1, h2, h3, h4, h5 { 
+      font-family: 'Rajdhani', sans-serif; 
+      font-weight: 700; 
+      color: var(--text-light);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    
+    h1 { font-size: 72px; }
+    h2 { font-size: 48px; margin-bottom: 20px; }
+    h3 { font-size: 32px; margin-bottom: 15px; }
+    h4 { font-size: 24px; margin-bottom: 12px; }
+    h5 { font-size: 20px; margin-bottom: 10px; }
+    
+    p {
+      margin-bottom: 15px;
+      font-size: 16px;
+      color: var(--text-dark);
+    }
+    
+    .lead {
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--dark-gray);
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+    
+    /* Animated shimmer effect */
+    .text-gradient {
+      background: linear-gradient(
+        90deg,
+        var(--accent-dark) 0%,
+        var(--accent) 25%,
+        var(--accent-light) 50%,
+        var(--accent) 75%,
+        var(--accent-dark) 100%
+      );
+      background-size: 200% 100%;
+      -webkit-background-clip: text; 
+      background-clip: text; 
+      color: transparent;
+      animation: shimmer 3s linear infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    
+    /* Element Animation Classes */
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+    
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s forwards;
+    }
+    
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-delay-1 { animation-delay: 0.2s; }
+    .animate-delay-2 { animation-delay: 0.4s; }
+    .animate-delay-3 { animation-delay: 0.6s; }
+    
+    /* ENHANCED: Responsive Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      transition: all 0.4s ease;
+      padding: 20px 0;
+      background: transparent;
+    }
+    
+    header.scrolled {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      padding: 15px 0;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+    
+    .logo {
+      position: relative;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo-image {
+      height: 50px;
+      width: auto;
+      transition: all 0.3s ease;
+    }
+    
+    header.scrolled .logo-image {
+      height: 40px;
+    }
+    
+    .nav-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .nav-links { 
+      display: flex; 
+      gap: 40px; 
+      margin-right: 40px;
+    }
+    
+    .nav-links a {
+      position: relative; 
+      font-weight: 500; 
+      color: var(--text-light);
+      text-decoration: none; 
+      transition: all 300ms var(--easing-standard);
+      padding: 8px 0;
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 300ms var(--easing-emphasis);
+    }
+    
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+    
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    
+    /* ENHANCED: Mobile Navigation */
+    .mobile-nav-toggle {
+      display: none;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--text-light);
+      z-index: 1002;
+    }
+    
+    .mobile-nav {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      max-width: 350px;
+      height: 100vh;
+      background: rgba(15, 15, 26, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1001;
+      transition: right 0.4s var(--easing-emphasis);
+      display: flex;
+      flex-direction: column;
+      padding: 100px 40px 40px;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .mobile-nav.active {
+      right: 0;
+    }
+    
+    .mobile-nav-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      color: var(--text-light);
+      cursor: pointer;
+      z-index: 1002;
+    }
+    
+    .mobile-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .mobile-nav-links a {
+      color: var(--text-light);
+      font-size: 20px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .mobile-nav-links a:hover {
+      color: var(--accent);
+      padding-left: 10px;
+    }
+    
+    /* Hero Section */
+    .hero {
+      height: 100vh; 
+      min-height: 800px;
+      display: flex; 
+      flex-direction: column;
+      justify-content: center; 
+      align-items: center;
+      text-align: center; 
+      padding: 100px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, rgba(79, 124, 255, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .hero h1 { 
+      font-size: clamp(40px, 7vw, 72px);
+      line-height: 1.1; 
+      margin-bottom: 32px;
+      position: relative;
+    }
+    
+    .hero h1::after {
+      content: '';
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--accent), transparent);
+    }
+    
+    .hero p {
+      font-size: clamp(18px, 3vw, 24px);
+      max-width: 700px; 
+      color: var(--dark-gray);
+      margin: 0 auto 48px;
+      line-height: 1.6;
+    }
+    
+    .hero-scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--accent);
+      font-size: 30px;
+      cursor: pointer;
+      animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+      40% { transform: translateY(-20px) translateX(-50%); }
+      60% { transform: translateY(-10px) translateX(-50%); }
+    }
+    
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 32px;
+      font-weight: 600;
+      border-radius: 10px;
+      background: var(--accent);
+      color: var(--text-light);
+      text-decoration: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 400ms var(--easing-emphasis);
+      z-index: 1;
+      font-size: 16px;
+      border: none;
+      letter-spacing: 0.02em;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%);
+      z-index: -1;
+    }
+    
+    .btn .btn-icon {
+      margin-left: 8px;
+      transform: translateX(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    .btn:hover .btn-icon {
+      transform: translateX(4px);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(79, 124, 255, 0.1);
+      border-color: var(--accent-light);
+      color: var(--text-light);
+    }
+    
+    .btn-large {
+      padding: 18px 36px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    
+    /* WOW FACTOR: 3D Tilt Cards */
+    .tilt-card {
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      border-radius: 16px;
+      transition: transform 0.1s ease; 
+    }
+    
+    .tilt-card-inner {
+      position: relative;
+      padding: 30px;
+      transform-style: preserve-3d;
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      transition: transform 0.1s ease;
+      background: rgba(26, 26, 58, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--card-shadow);
+    }
+    
+    .tilt-card-inner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+      border-radius: 16px;
+      transition: opacity 0.3s ease;
+      opacity: 0;
+    }
+    
+    .tilt-card:hover .tilt-card-inner::after {
+      opacity: 1;
+    }
+    
+    .tilt-element {
+      transform: translateZ(20px);
+    }
+    
+    /* Stats Section */
+    .stats { 
+      background: rgba(15, 15, 26, 0.5);
+      position: relative;
+      border-top: 1px solid rgba(255, 255, 255, 0.05); 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+    }
+    
+    .stats-grid {
+      display: grid; 
+      grid-template-columns: repeat(3,1fr); 
+      gap: 40px; 
+      margin-top: 40px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .stat-number {
+      font-size: 54px; 
+      font-family: 'Rajdhani', sans-serif; 
+      font-weight: 700; 
+      margin-bottom: 12px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -1px;
+      position: relative;
+    }
+    
+    .stat-number::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 2px;
+      background: rgba(79, 124, 255, 0.2);
+    }
+    
+    .stat-label {
+      font-size: 15px; 
+      color: var(--dark-gray); 
+      text-transform: uppercase; 
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+    
+    /* Process Section */
+    .how-it-works {
+      position: relative;
+      padding: 120px 0;
+    }
+    
+    .section-subtitle {
+      color: var(--accent);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+      display: block;
+    }
+    
+    .steps-grid {
+      display: grid; 
+      grid-template-columns: repeat(3,1fr); 
+      gap: 40px; 
+      margin-top: 60px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .step-badge {
+      width: 60px; 
+      height: 60px; 
+      border-radius: 50%; 
+      background: var(--accent);
+      color: var(--text-light); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      font-size: 24px; 
+      font-family: 'Rajdhani', sans-serif; 
+      margin: 0 auto 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .step-badge::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+      border-radius: 50% 50% 0 0;
+    }
+    
+    /* Services Section */
+    .services { 
+      background: rgba(15, 15, 26, 0.5);
+      position: relative;
+      border-top: 1px solid rgba(255, 255, 255, 0.05); 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .services-grid {
+      display: grid; 
+      grid-template-columns: repeat(2,1fr); 
+      gap: 40px; 
+      margin-top: 60px;
+    }
+    
+    .service-card {
+      height: 400px; 
+      border-radius: 20px; 
+      background-size: cover; 
+      background-position: center;
+      position: relative; 
+      overflow: hidden; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: flex-end;
+      transition: all 400ms var(--easing-emphasis);
+      box-shadow: var(--card-shadow);
+      border: none;
+    }
+    
+    .service-card::before {
+      content: ''; 
+      position: absolute; 
+      inset: 0;
+      background: linear-gradient(180deg, 
+                 rgba(15, 15, 26, 0) 40%, 
+                 rgba(15, 15, 26, 0.7) 70%, 
+                 rgba(15, 15, 26, 0.9) 100%);
+      transition: all 400ms ease;
+    }
+    
+    .service-card:hover::before {
+      background: linear-gradient(180deg, 
+                 rgba(15, 15, 26, 0.3) 0%,
+                 rgba(15, 15, 26, 0.7) 60%, 
+                 rgba(15, 15, 26, 0.9) 100%);
+    }
+    
+    .service-card:hover {
+      transform: translateY(-15px) scale(1.03);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    }
+    
+    .service-card-content {
+      position: relative; 
+      padding: 40px; 
+      z-index: 1; 
+      color: var(--text-light);
+      transform: translateY(10px);
+      transition: all 400ms ease;
+    }
+    
+    .service-card:hover .service-card-content {
+      transform: translateY(0);
+    }
+    
+    .service-card h3 { 
+      font-size: 28px; 
+      margin-bottom: 16px; 
+      color: var(--text-light);
+      position: relative;
+    }
+    
+    .service-card h3::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -8px;
+      width: 40px;
+      height: 2px;
+      background: rgba(79, 124, 255, 0.4);
+      transition: all 300ms ease;
+    }
+    
+    .service-card:hover h3::after {
+      width: 60px;
+      background: rgba(79, 124, 255, 0.8);
+    }
+    
+    .service-card p { 
+      color: var(--medium-gray);
+      font-weight: 400;
+      line-height: 1.6;
+      max-width: 90%;
+      transform: translateY(5px);
+      opacity: 0.9;
+      transition: all 400ms ease;
+    }
+    
+    .service-card:hover p {
+      opacity: 1;
+      transform: translateY(0);
+      color: var(--text-light);
+    }
+    
+    /* Testimonials */
+    .testimonials {
+      position: relative;
+      padding: 120px 0;
+    }
+    
+    .testimonial-carousel { 
+      max-width: 800px; 
+      margin: 60px auto 0; 
+      position: relative; 
+      overflow: visible;
+      box-shadow: var(--card-shadow);
+      border-radius: 20px;
+      background: rgba(26, 26, 58, 0.4);
+      backdrop-filter: blur(10px);
+      padding: 60px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .testimonial-carousel::before {
+      content: "\f10d";
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 30px;
+      color: rgba(79, 124, 255, 0.2);
+    }
+    
+    .testimonial-slides { 
+      position: relative;
+    }
+    
+    .testimonial-slide {
+      opacity: 0; 
+      transition: opacity 500ms var(--easing-standard);
+      display: none;
+    }
+    
+    .testimonial-slide.active { 
+      opacity: 1; 
+      display: block;
+    }
+    
+    .testimonial-quote {
+      font-size: 22px; 
+      font-style: italic; 
+      margin-bottom: 40px; 
+      color: var(--text-light);
+      position: relative;
+      line-height: 1.6;
+    }
+    
+    .testimonial-author { 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 20px; 
+      position: relative;
+      z-index: 1;
+    }
+    
+    .testimonial-avatar {
+      width: 80px; 
+      height: 80px; 
+      border-radius: 50%; 
+      background: var(--light-gray);
+      overflow: hidden; 
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      transition: all 300ms ease;
+    }
+    
+    .testimonial-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .testimonial-slide.active .testimonial-avatar {
+      transform: scale(1.05);
+      border-color: var(--accent);
+    }
+    
+    .testimonial-name { 
+      font-size: 20px; 
+      font-weight: 700; 
+      color: var(--text-light); 
+      margin-bottom: 4px;
+    }
+    
+    .testimonial-role { 
+      font-size: 16px; 
+      color: var(--dark-gray);
+      font-weight: 500;
+    }
+    
+    .carousel-dots {
+      display: flex; 
+      justify-content: center; 
+      gap: 12px; 
+      margin-top: 40px;
+    }
+    
+    .carousel-dot {
+      width: 12px; 
+      height: 12px; 
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1); 
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      cursor: pointer; 
+      transition: all 300ms var(--easing-standard);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .carousel-dot.active {
+      background: var(--accent); 
+      border-color: var(--accent); 
+      transform: scale(1.2);
+    }
+    
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(26, 26, 58, 0.6);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--text-light);
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    
+    .carousel-nav:hover {
+      background: var(--accent);
+      color: var(--text-light);
+    }
+    
+    .carousel-prev {
+      left: 15px;
+    }
+    
+    .carousel-next {
+      right: 15px;
+    }
+    
+    /* NEW: FAQ Section */
+    .faq-section {
+      position: relative;
+      padding: 120px 0;
+      background: rgba(15, 15, 26, 0.5);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .faq-container {
+      max-width: 800px;
+      margin: 60px auto 0;
+    }
+    
+    .faq-item {
+      margin-bottom: 20px;
+      border-radius: 12px;
+      background: rgba(26, 26, 58, 0.4);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    
+    .faq-item:hover {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .faq-question {
+      padding: 20px 30px;
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .faq-question::after {
+      content: "\f107";
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      font-size: 18px;
+      color: var(--accent);
+      transition: transform 0.3s ease;
+    }
+    
+    .faq-item.active .faq-question {
+      color: var(--accent-light);
+    }
+    
+    .faq-item.active .faq-question::after {
+      transform: rotate(180deg);
+    }
+    
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+    }
+    
+    .faq-item.active .faq-answer {
+      max-height: 1000px;
+      transition: max-height 0.6s ease-in-out;
+    }
+    
+    .faq-answer-content {
+      padding: 0 30px 20px;
+      color: var(--text-dark);
+    }
+    
+    /* WOW FACTOR: Atmospheric Pulse */
+    .atmospheric-pulse {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+      animation: pulsate 10s infinite ease-in-out;
+    }
+    
+    @keyframes pulsate {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1); opacity: 0.05; }
+      100% { transform: scale(0.8); opacity: 0; }
+    }
+    
+    /* WOW FACTOR: Dynamic Aurora Effect */
+    .aurora-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: -2;
+      opacity: 0.07;
+      pointer-events: none;
+    }
+    
+    .aurora {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300%;
+      height: 300%;
+      background: conic-gradient(
+        from 137deg,
+        transparent 0%,
+        rgba(62, 84, 172, 0.3) 10%,
+        rgba(120, 99, 215, 0.2) 20%, 
+        transparent 30%,
+        rgba(66, 195, 223, 0.2) 40%,
+        rgba(79, 124, 255, 0.3) 50%,
+        transparent 60%,
+        rgba(120, 99, 215, 0.2) 70%,
+        rgba(79, 124, 255, 0.3) 80%,
+        transparent 100%
+      );
+      filter: blur(60px);
+      opacity: 0.3;
+      animation: rotateAurora 60s linear infinite;
+    }
+    
+    @keyframes rotateAurora {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    
+    /* CTA Section */
+    .final-cta { 
+      position: relative;
+      padding: 120px 0;
+    }
+    
+    .cta-box {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px;
+      background: rgba(26, 26, 58, 0.4);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, var(--accent-dark), var(--accent-light), var(--accent-dark));
+    }
+    
+    .cta-buttons { 
+      display: flex; 
+      gap: 20px; 
+      justify-content: center; 
+    }
+    
+    /* Footer */
+    footer { 
+      background: rgba(10, 10, 20, 0.8);
+      color: var(--text-light);
+      padding: 60px 0 30px;
+      position: relative;
+      overflow: hidden;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    .footer-left {
+      flex: 1;
+      min-width: 300px;
+    }
+    
+    .footer-right {
+      display: flex;
+      gap: 60px;
+    }
+    
+    .footer-about { 
+      color: var(--dark-gray);
+      margin: 20px 0;
+      line-height: 1.6;
+      max-width: 350px;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 16px;
+    }
+    
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-light);
+      transition: all 300ms ease;
+      position: relative;
+    }
+    
+    .social-link:hover {
+      background: var(--accent);
+      transform: translateY(-3px);
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-heading {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-light);
+    }
+    
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+    
+    .footer-links a {
+      color: var(--dark-gray);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 999;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .back-to-top.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .back-to-top:hover {
+      background: var(--accent-light);
+      transform: translateY(-5px);
+    }
+    
+    /* ENHANCED: Responsive Styles */
+    @media (max-width: 1200px) {
+      .container {
+        padding: 0 30px;
+      }
+      
+      .steps-grid, .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 992px) {
+      .header-container {
+        padding: 0 20px;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .mobile-nav-toggle {
+        display: block;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .footer-right {
+        gap: 30px;
+      }
+      
+      .testimonial-carousel {
+        padding: 40px 20px;
+      }
+      
+      .cosmic-horizon {
+        height: 60px;
+        bottom: -60px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      section {
+        padding: 80px 0;
+        margin-bottom: 60px;
+      }
+      
+      .container {
+        padding: 0 20px;
+      }
+      
+      h1 { font-size: 48px; }
+      h2 { font-size: 36px; }
+      h3 { font-size: 24px; }
+      
+      .steps-grid, .services-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .cta-box {
+        padding: 40px 20px;
+      }
+      
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .stat-number {
+        font-size: 42px;
+      }
+      
+      .footer-right {
+        flex-direction: column;
+        gap: 30px;
+      }
+      
+      .footer-content {
+        flex-direction: column;
+      }
+      
+      .cosmic-horizon {
+        height: 40px;
+        bottom: -40px;
+      }
+      
+      .hero {
+        min-height: 600px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .testimonial-author {
+        flex-direction: column;
+      }
+      
+      .testimonial-avatar {
+        margin-bottom: 15px;
+      }
+      
+      .testimonial-quote {
+        font-size: 18px;
+      }
+      
+      .hero h1 {
+        font-size: 36px;
+      }
+      
+      .hero p {
+        font-size: 16px;
+      }
+      
+      .btn {
+        padding: 14px 24px;
+        font-size: 14px;
+      }
+      
+      .btn-large {
+        padding: 16px 28px;
+        font-size: 16px;
+      }
+      
+      .faq-question {
+        padding: 15px 20px;
+        font-size: 16px;
+      }
+      
+      .faq-answer-content {
+        padding: 0 20px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 3D Galaxy Background -->
+  <div id="galaxy-background"></div>
+
+  <!-- Enhanced Header with Mobile Support -->
+  <header id="header">
+    <div class="header-container">
+      <a href="#" class="logo">
+        <img src="images/quantumlabs.png" alt="Quantum Labs Logo" class="logo-image" style="height: 110px;">
+      </a>
+      <div class="nav-container">
+        <nav class="nav-links">
+          <a href="home2.html" class="active">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Menu -->
+  <div class="mobile-nav" id="mobile-nav">
+    <button class="mobile-nav-close" id="mobile-nav-close">
+      <i class="fas fa-times"></i>
+    </button>
+    <nav class="mobile-nav-links">
+      <a href="home2.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <h1 class="glitch-text">TRANSFORM YOUR <span class="text-gradient">BUSINESS</span> GROWTH</h1>
+      <p class="fade-in-up animate-delay-1">We architect performance-driven systems that drive predictable, sustainable revenue</p>
+      <a href="contact.html" class="btn btn-accent btn-large hero-cta fade-in-up animate-delay-2">Schedule a Consultation <i class="fas fa-arrow-right btn-icon"></i></a>
+    </div>
+    <div class="hero-scroll-indicator fade-in animate-delay-3">
+      <i class="fas fa-chevron-down"></i>
+    </div>
+    <!-- NEW: Atmospheric Pulse -->
+    <div class="atmospheric-pulse" style="width: 1000px; height: 1000px; left: 50%; top: 50%; transform: translate(-50%, -50%);"></div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats" id="results">
+    <div class="container">
+      <span class="section-subtitle text-center">Our Impact</span>
+      <h2 class="text-center"><span class="text-gradient">Results</span>, Not Promises</h2>
+      <p class="lead text-center">What we've achieved for our clients</p>
+      <div class="stats-grid">
+        <div class="tilt-card">
+          <div class="tilt-card-inner">
+            <div class="tilt-element">
+              <div class="stat-number" data-count="127">0</div>
+              <div class="stat-label">Businesses Transformed</div>
+            </div>
+          </div>
+        </div>
+        <div class="tilt-card">
+          <div class="tilt-card-inner">
+            <div class="tilt-element">
+              <div class="stat-number" data-count="3.8">0</div>
+              <div class="stat-label">Average ROAS</div>
+            </div>
+          </div>
+        </div>
+        <div class="tilt-card">
+          <div class="tilt-card-inner">
+            <div class="tilt-element">
+              <div class="stat-number" data-count="4.7">£0M</div>
+              <div class="stat-label">Revenue Generated</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Cosmic Horizon Divider for Section Separation -->
+    <div class="cosmic-horizon"></div>
+  </section>
+
+  <!-- Process Section -->
+  <section class="how-it-works" id="process">
+    <div class="container text-center">
+      <span class="section-subtitle">Our Methodology</span>
+      <h2>Our <span class="text-gradient">Process</span></h2>
+      <p class="lead">From market analysis to scalable growth systems</p>
+      <div class="steps-grid">
+        <div class="tilt-card">
+          <div class="tilt-card-inner">
+            <div class="tilt-element">
+              <div class="step-badge">1</div>
+              <h3>Strategic Analysis</h3>
+              <p>We analyze your business model, market position, and identify untapped opportunities</p>
+            </div>
+          </div>
+        </div>
+        <div class="tilt-card">
+          <div class="tilt-card-inner">
+            <div class="tilt-element">
+              <div class="step-badge">2</div>
+              <h3>Growth Architecture</h3>
+              <p>Build customized systems for customer acquisition, conversion, and retention</p>
+            </div>
+          </div>
+        </div>
+        <div class="tilt-card">
+          <div class="tilt-card-inner">
+            <div class="tilt-element">
+              <div class="step-badge">3</div>
+              <h3>Performance Optimization</h3>
+              <p>Launch, test, and continuously optimize your campaigns for maximum ROI</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Cosmic Horizon Divider for Section Separation -->
+    <div class="cosmic-horizon"></div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="services" id="services">
+    <div class="container text-center">
+      <span class="section-subtitle">Our Solutions</span>
+      <h2>What We <span class="text-gradient">Deliver</span></h2>
+      <p class="lead">Comprehensive solutions for predictable business growth</p>
+      <div class="services-grid">
+        <div class="service-card" style="background-image:url('https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1470&q=80')">
+          <div class="service-card-content">
+            <h3>Demand Generation</h3>
+            <p>Multi-channel customer acquisition strategies using data-driven optimization</p>
+          </div>
+        </div>
+        <div class="service-card" style="background-image:url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1415&q=80')">
+          <div class="service-card-content">
+            <h3>Revenue Systems</h3>
+            <p>End-to-end conversion and automation systems that scale your business 24/7</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Cosmic Horizon Divider for Section Separation -->
+    <div class="cosmic-horizon"></div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials" id="testimonials">
+    <div class="container text-center">
+      <span class="section-subtitle">Success Stories</span>
+      <h2>Client <span class="text-gradient">Case Studies</span></h2>
+      <p class="lead">Real results from our business partnerships</p>
+      <div class="testimonial-carousel">
+        <div class="testimonial-slides">
+          <div class="testimonial-slide active">
+            <p class="testimonial-quote">Quantum Labs transformed our customer acquisition strategy, increasing our conversion rate by 83% and reducing our CAC by 42% in just 90 days.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">
+                <img src="https://randomuser.me/api/portraits/women/25.jpg" alt="Alexandra K.">
+              </div>
+              <div class="testimonial-info">
+                <p class="testimonial-name">Alexandra Kennedy</p>
+                <p class="testimonial-role">CEO, Vertex Technologies</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-slide">
+            <p class="testimonial-quote">The growth systems they built for our SaaS platform delivered a 5.2x ROAS in the first quarter. Their data-driven approach eliminated all guesswork.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">
+                <img src="https://randomuser.me/api/portraits/men/36.jpg" alt="Michael R.">
+              </div>
+              <div class="testimonial-info">
+                <p class="testimonial-name">Michael Ramirez</p>
+                <p class="testimonial-role">Founder, Nimbus Solutions</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-slide">
+            <p class="testimonial-quote">With Quantum Labs' revenue systems, we've seen our monthly recurring revenue grow from £125K to £340K in just six months. Game-changing partnership.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Sarah L.">
+              </div>
+              <div class="testimonial-info">
+                <p class="testimonial-name">Sarah Lancaster</p>
+                <p class="testimonial-role">COO, Elevate Analytics</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-dots">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+        <div class="carousel-prev carousel-nav">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="carousel-next carousel-nav">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+    </div>
+    <!-- Cosmic Horizon Divider for Section Separation -->
+    <div class="cosmic-horizon"></div>
+  </section>
+
+  <!-- NEW: FAQ Section -->
+  <section class="faq-section" id="faq">
+    <div class="container text-center">
+      <span class="section-subtitle">Common Questions</span>
+      <h2>Frequently <span class="text-gradient">Asked Questions</span></h2>
+      <p class="lead">Everything you need to know about our services</p>
+      
+      <div class="faq-container">
+        <div class="faq-item">
+          <div class="faq-question">How does your growth system approach differ from traditional marketing?</div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              <p>Unlike traditional marketing that focuses on disconnected tactics, our growth systems approach integrates acquisition, conversion, and retention strategies into a comprehensive revenue architecture. We use data-driven methodologies to identify your ideal customer profiles, build predictable acquisition channels, optimize conversion pathways, and maximize customer lifetime value – all working together as a unified system rather than siloed activities.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">What types of businesses do you typically work with?</div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              <p>We specialize in working with B2B technology companies, SaaS platforms, and knowledge-based service businesses. Our clients typically have established products or services generating at least £500K in annual revenue and are looking to scale predictably. We've had particularly strong results with companies in fintech, edtech, martech, healthcare technology, and professional services sectors.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">How long does it take to see results from your strategies?</div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              <p>Most clients begin seeing initial improvements within 30-45 days of implementation. Our strategic analysis and growth architecture typically takes 2-3 weeks to develop, followed by implementation and optimization. Significant, transformative results typically emerge around the 90-day mark as our systems begin working together and we optimize based on performance data. For enterprise clients with complex sales cycles, full realization of results may take 4-6 months.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">What is your typical engagement process?</div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              <p>Our process begins with a comprehensive strategic analysis, where we examine your current business model, customer journey, acquisition channels, and conversion systems. We then develop a tailored growth architecture blueprint specific to your business objectives. After approval, we move to implementation, which includes setting up acquisition channels, optimizing conversion systems, and establishing performance metrics. Finally, we enter the continuous optimization phase, where we refine the system based on real-world data to maximize ROI.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">How do you measure success and ROI?</div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              <p>We establish clear KPIs at the beginning of each engagement tied directly to revenue impact. Common metrics include customer acquisition cost (CAC), conversion rates at each stage of the funnel, customer lifetime value (LTV), and overall return on advertising spend (ROAS). We provide transparent reporting dashboards that track these metrics in real-time, allowing you to see exactly how our systems are performing and the return on your investment. Our benchmark is achieving at least a 3:1 return on investment across our engagements.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Cosmic Horizon Divider for Section Separation -->
+    <div class="cosmic-horizon"></div>
+  </section>
+
+  <!-- Final CTA Section -->
+  <section class="final-cta" id="contact">
+    <div class="container">
+      <div class="cta-box">
+        <span class="section-subtitle">Get Started</span>
+        <h2>Ready to <span class="text-gradient">accelerate</span>?</h2>
+        <p>Let's discuss how our growth systems can transform your business</p>
+        <div class="cta-buttons">
+          <a href="contact.html" class="btn btn-accent btn-large">Schedule Consultation <i class="fas fa-arrow-right btn-icon"></i></a>
+          
+        </div>
+      </div>
+    </div>
+    <!-- Cosmic Horizon Divider for Section Separation -->
+    <div class="cosmic-horizon"></div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-left">
+          <a href="#" class="logo">
+            <img src="images/quantumlabs.png" alt="Quantum Labs Logo" class="logo-image" style="height: 110px;">
+          </a>
+          <p class="footer-about">
+            Engineering predictable growth systems for visionary businesses. We transform how companies acquire customers and scale revenue.
+          </p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/quantumlabshq?igsh=MWw5cTN6bWd0YXMyeQ%3D%3D" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          </div>
+        </div>
+        <div class="footer-right">
+          <div class="footer-column">
+            <h4 class="footer-heading">Quick Links</h4>
+            <ul class="footer-links">
+              <li><a href="home2.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h4 class="footer-heading">Contact</h4>
+            <ul class="footer-links">
+              <li><a href="mailto:Zakeriye@quantumlabshq.com">Zakeriye@quantumlabshq.com</a></li>
+              <li><a href="tel:+447956487424">+44 7956487424 </a></li>
+              <li><a href="#">Birmingham, United Kingdom</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2024 Quantum Labs. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top button -->
+  <div class="back-to-top" id="back-to-top">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize 3D Galaxy Background
+      initializeGalaxyBackground();
+      
+      // Initialize 3D tilt effect
+      initializeTiltCards();
+      
+      // Initialize FAQ toggles
+      initFaqToggles();
+      
+      // Initialize Mobile Navigation
+      initMobileNav();
+    });
+    
+    // Initialize Mobile Navigation
+    function initMobileNav() {
+      const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+      const mobileNavClose = document.getElementById('mobile-nav-close');
+      const mobileNav = document.getElementById('mobile-nav');
+      const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a');
+      
+      mobileNavToggle.addEventListener('click', () => {
+        mobileNav.classList.add('active');
+      });
+      
+      mobileNavClose.addEventListener('click', () => {
+        mobileNav.classList.remove('active');
+      });
+      
+      // Close mobile nav when a link is clicked
+      mobileNavLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mobileNav.classList.remove('active');
+        });
+      });
+      
+      // Close mobile nav when clicking outside
+      document.addEventListener('click', (e) => {
+        if (mobileNav.classList.contains('active') && 
+            !mobileNav.contains(e.target) && 
+            e.target !== mobileNavToggle && 
+            !mobileNavToggle.contains(e.target)) {
+          mobileNav.classList.remove('active');
+        }
+      });
+    }
+    
+    // Initialize FAQ section toggles
+    function initFaqToggles() {
+      const faqItems = document.querySelectorAll('.faq-item');
+      
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        
+        question.addEventListener('click', () => {
+          // Close all other items
+          faqItems.forEach(otherItem => {
+            if (otherItem !== item && otherItem.classList.contains('active')) {
+              otherItem.classList.remove('active');
+            }
+          });
+          
+          // Toggle current item
+          item.classList.toggle('active');
+        });
+      });
+    }
+    
+    // Initialize 3D Galaxy Background
+    function initializeGalaxyBackground() {
+      // Set up Three.js scene
+      const container = document.getElementById('galaxy-background');
+      const scene = new THREE.Scene();
+      
+      // Setup camera
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 3000);
+      camera.position.z = 1000;
+      camera.position.y = 0;
+      
+      // Setup renderer
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
+      container.appendChild(renderer.domElement);
+      
+      // Create star materials
+      const starsMaterial = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 1.5,
+        transparent: true,
+        opacity: 0.8,
+        sizeAttenuation: true
+      });
+      
+      // Distant stars (small)
+      const starsGeometry = new THREE.BufferGeometry();
+      const starsCount = 3000;
+      const starsPositions = new Float32Array(starsCount * 3);
+      
+      for (let i = 0; i < starsCount; i++) {
+        const i3 = i * 3;
+        starsPositions[i3] = (Math.random() - 0.5) * 3000;
+        starsPositions[i3 + 1] = (Math.random() - 0.5) * 3000;
+        starsPositions[i3 + 2] = (Math.random() - 0.5) * 3000;
+      }
+      
+      starsGeometry.setAttribute('position', new THREE.BufferAttribute(starsPositions, 3));
+      const starsMesh = new THREE.Points(starsGeometry, starsMaterial);
+      scene.add(starsMesh);
+      
+      // Create larger, brighter stars
+      const brightStarsMaterial = new THREE.PointsMaterial({
+        color: 0x4f7cff,
+        size: 3,
+        transparent: true,
+        opacity: 1,
+        sizeAttenuation: true
+      });
+      
+      const brightStarsGeometry = new THREE.BufferGeometry();
+      const brightStarsCount = 100;
+      const brightStarsPositions = new Float32Array(brightStarsCount * 3);
+      
+      for (let i = 0; i < brightStarsCount; i++) {
+        const i3 = i * 3;
+        brightStarsPositions[i3] = (Math.random() - 0.5) * 2000;
+        brightStarsPositions[i3 + 1] = (Math.random() - 0.5) * 2000;
+        brightStarsPositions[i3 + 2] = (Math.random() - 0.5) * 2000;
+      }
+      
+      brightStarsGeometry.setAttribute('position', new THREE.BufferAttribute(brightStarsPositions, 3));
+      const brightStarsMesh = new THREE.Points(brightStarsGeometry, brightStarsMaterial);
+      scene.add(brightStarsMesh);
+      
+      // Create nebula effect using particle system
+      const nebulaGeometry = new THREE.BufferGeometry();
+      const nebulaCount = 1000;
+      const nebulaPositions = new Float32Array(nebulaCount * 3);
+      const nebulaSizes = new Float32Array(nebulaCount);
+      const nebulaColors = new Float32Array(nebulaCount * 3);
+      
+      for (let i = 0; i < nebulaCount; i++) {
+        const i3 = i * 3;
+        const radius = 300 + Math.random() * 300;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
+        
+        // Calculate position on a sphere
+        nebulaPositions[i3] = radius * Math.sin(phi) * Math.cos(theta);
+        nebulaPositions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        nebulaPositions[i3 + 2] = radius * Math.cos(phi);
+        
+        // Random size
+        nebulaSizes[i] = 5 + Math.random() * 15;
+        
+        // Color variation (blues and purples)
+        const colorChoice = Math.random();
+        if (colorChoice < 0.6) {
+          // Blue tones
+          nebulaColors[i3] = 0.2 + Math.random() * 0.2;
+          nebulaColors[i3 + 1] = 0.4 + Math.random() * 0.3;
+          nebulaColors[i3 + 2] = 0.7 + Math.random() * 0.3;
+        } else {
+          // Purple tones
+          nebulaColors[i3] = 0.5 + Math.random() * 0.3;
+          nebulaColors[i3 + 1] = 0.2 + Math.random() * 0.2;
+          nebulaColors[i3 + 2] = 0.7 + Math.random() * 0.3;
+        }
+      }
+      
+      nebulaGeometry.setAttribute('position', new THREE.BufferAttribute(nebulaPositions, 3));
+      nebulaGeometry.setAttribute('color', new THREE.BufferAttribute(nebulaColors, 3));
+      nebulaGeometry.setAttribute('size', new THREE.BufferAttribute(nebulaSizes, 1));
+      
+      const nebulaMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+          time: { value: 0 },
+          pointSize: { value: 5.0 }
+        },
+        vertexShader: `
+          attribute float size;
+          attribute vec3 color;
+          varying vec3 vColor;
+          uniform float time;
+          void main() {
+            vColor = color;
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            gl_PointSize = size * (300.0 / -mvPosition.z);
+            gl_Position = projectionMatrix * mvPosition;
+          }
+        `,
+        fragmentShader: `
+          varying vec3 vColor;
+          void main() {
+            float dist = length(gl_PointCoord - vec2(0.5));
+            if (dist > 0.5) discard;
+            gl_FragColor = vec4(vColor, 1.0 - (dist * 2.0));
+          }
+        `,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      });
+      
+      const nebulaMesh = new THREE.Points(nebulaGeometry, nebulaMaterial);
+      scene.add(nebulaMesh);
+      
+      // Interactive elements - move on mouse movement
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetX = 0;
+      let targetY = 0;
+      
+      document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX - window.innerWidth / 2) / 100;
+        mouseY = (event.clientY - window.innerHeight / 2) / 100;
+      });
+      
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+      
+      // Animation loop
+      let lastTime = 0;
+      const animate = (time) => {
+        const delta = time - lastTime;
+        lastTime = time;
+        
+        targetX = mouseX * 0.5;
+        targetY = mouseY * 0.5;
+        
+        camera.position.x += (targetX - camera.position.x) * 0.05;
+        camera.position.y += (-targetY - camera.position.y) * 0.05;
+        camera.lookAt(scene.position);
+        
+        // Rotate star systems
+        starsMesh.rotation.y += 0.0001 * delta;
+        brightStarsMesh.rotation.y += 0.00015 * delta;
+        nebulaMesh.rotation.y += 0.00005 * delta;
+        
+        // Update nebula time uniform
+        nebulaMaterial.uniforms.time.value = time * 0.001;
+        
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      };
+      
+      animate(0);
+    }
+    
+    // Initialize 3D tilt effect for cards
+    function initializeTiltCards() {
+      const tiltCards = document.querySelectorAll('.tilt-card');
+      
+      tiltCards.forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+          const rect = card.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          
+          const mouseX = e.clientX - centerX;
+          const mouseY = e.clientY - centerY;
+          
+          const tiltX = (mouseY / rect.height * 2) * 10;
+          const tiltY = -(mouseX / rect.width * 2) * 10;
+          
+          const inner = card.querySelector('.tilt-card-inner');
+          inner.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          const inner = card.querySelector('.tilt-card-inner');
+          inner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
+      });
+    }
+    
+    // Shrink header on scroll
+    window.addEventListener('scroll', function() {
+      const header = document.getElementById('header');
+      const backToTop = document.getElementById('back-to-top');
+      
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+        backToTop.classList.add('active');
+      } else {
+        header.classList.remove('scrolled');
+        backToTop.classList.remove('active');
+      }
+    });
+    
+    // Testimonial carousel
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const dots = document.querySelectorAll('.carousel-dot');
+    const prev = document.querySelector('.carousel-prev');
+    const next = document.querySelector('.carousel-next');
+    let current = 0;
+    let interval;
+    
+    // Show specific slide
+    function showSlide(index) {
+      // Hide all slides
+      slides.forEach(slide => {
+        slide.classList.remove('active');
+        slide.style.display = 'none';
+      });
+      
+      // Deactivate all dots
+      dots.forEach(dot => {
+        dot.classList.remove('active');
+      });
+      
+      // Calculate the correct index (wrap around if needed)
+      current = (index + slides.length) % slides.length;
+      
+      // Show current slide and activate current dot
+      slides[current].classList.add('active');
+      slides[current].style.display = 'block';
+      dots[current].classList.add('active');
+    }
+    
+    // Initialize slides
+    slides.forEach((slide, index) => {
+      if (index !== 0) {
+        slide.style.display = 'none';
+      }
+    });
+    
+    // Navigate to next slide
+    function nextSlide() {
+      showSlide(current + 1);
+    }
+    
+    // Navigate to previous slide
+    function prevSlide() {
+      showSlide(current - 1);
+    }
+    
+    // Auto-advance slides
+    function startAutoplay() {
+      interval = setInterval(nextSlide, 5000);
+    }
+    
+    function stopAutoplay() {
+      clearInterval(interval);
+    }
+    
+    // Click events for dots
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        showSlide(index);
+        stopAutoplay();
+        startAutoplay();
+      });
+    });
+    
+    // Click events for navigation buttons
+    if (prev && next) {
+      prev.addEventListener('click', () => {
+        prevSlide();
+        stopAutoplay();
+        startAutoplay();
+      });
+      
+      next.addEventListener('click', () => {
+        nextSlide();
+        stopAutoplay();
+        startAutoplay();
+      });
+    }
+    
+    // Pause autoplay on hover
+    const carousel = document.querySelector('.testimonial-carousel');
+    if (carousel) {
+      carousel.addEventListener('mouseenter', stopAutoplay);
+      carousel.addEventListener('mouseleave', startAutoplay);
+    }
+    
+    // Start autoplay
+    startAutoplay();
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        if (this.getAttribute('href') !== '#') {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          
+          if (targetElement) {
+            // Adjust for fixed header
+            const headerHeight = document.getElementById('header').offsetHeight;
+            const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - headerHeight - 20;
+            
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+          }
+        }
+      });
+    });
+    
+    // Back to top button
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Animate stats counter
+    const statNumbers = document.querySelectorAll('.stat-number');
+    const statObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        
+        const el = entry.target;
+        const to = parseFloat(el.dataset.count);
+        const isMoneyValue = el.textContent.includes('£');
+        const start = performance.now();
+        
+        const step = t => {
+          const p = Math.min((t - start)/2000, 1);
+          
+          if (isMoneyValue) {
+            el.textContent = `£${(p*to).toFixed(1)}M`;
+          } else {
+            el.textContent = to.toString().includes('.') ? (p*to).toFixed(1) : Math.floor(p*to);
+          }
+          
+          if (p < 1) requestAnimationFrame(step);
+        };
+        
+        requestAnimationFrame(step);
+        statObserver.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    
+    statNumbers.forEach(n => statObserver.observe(n));
+    
+    // Add Atmospheric Pulses at intervals
+    function createAtmosphericPulses() {
+      const sections = document.querySelectorAll('section');
+      
+      sections.forEach(section => {
+        if (Math.random() > 0.7) { // Only add to some sections randomly
+          const pulse = document.createElement('div');
+          pulse.classList.add('atmospheric-pulse');
+          
+          // Random size between 600px and 1200px
+          const size = Math.random() * 600 + 600;
+          pulse.style.width = `${size}px`;
+          pulse.style.height = `${size}px`;
+          
+          // Random position
+          pulse.style.left = `${Math.random() * 100}%`;
+          pulse.style.top = `${Math.random() * 100}%`;
+          
+          // Random animation delay
+          pulse.style.animationDelay = `${Math.random() * 5}s`;
+          
+          section.appendChild(pulse);
+        }
+      });
+    }
+    
+    // Create atmospheric pulses
+    createAtmosphericPulses();
+  </script>
+</body>
+</html>
